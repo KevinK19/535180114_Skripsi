@@ -1,0 +1,119 @@
+{% extends 'layouts/app2.html' %}
+
+{% block content %}
+<div class="card card-default">
+    <div class="card-header">
+        <div class="card-tools">
+            <a class="btn btn-primary btn-icon-split btn-sm" href="#" data-toggle="modal" data-target="#uploadModal" title="Menampilkan pop-up untuk upluad data.">
+                <i class="fas fa-upload"></i> Upload Data
+            </a>
+            <a class="mr-2 btn btn-danger btn-icon-split btn-sm" href="/dataset/reset" onclick="return confirm('Apakah anda yakin?')" title="Menghapus semua dataset dan kategori.">
+                <i class="fas fa-trash"></i> Reset Datasets
+            </a>
+        </div>
+        <h3 class="card-title">Datasets</h3>
+        <br>
+    </div>
+    <form method="GET">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <!-- Select Input -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Pilih Kategori</label>
+                        <select class="form-control" name="kategori" required="">
+                            {% for item in list_kategori %}
+                                <option value="{{ item['id'] }}" {% if item['kategori'] == kategori['kategori'] %} selected {% endif %}>
+                                    {{ item['kategori'] }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <!-- Button Tambah Data -->
+                <div class="ms-3">
+                    <a type="button" class="btn btn-outline-primary btn-sm" href="/kategori/create"> Tambah kategori
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+
+{% if show_data == 1 %}
+<div class="card card-default">
+    <div class="card-header">
+        <h3 class="card-title">Dataset {{ kategori['kategori'] }}</h3>
+        <br>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped data-table" style="width:100%;">
+            <thead>
+                <tr>
+                    <th style="width: 10px;">No</th>
+                    <th>Nama Data</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ item['nama_data'] }}</td>
+                        <td>
+                            <a href="/dataset/detail/{{ item['id'] }}" class="btn btn-sm btn-primary shadow-sm" title="Menampilkan detail dataset berdasarkan nama data yang dipilih.">
+                                <i class="fa fa-eye"></i> Detail
+                            </a>
+                            <a class="btn btn-sm btn-danger" href="/dataset/{{ item['id'] }}/delete" onclick="return confirm('Are you sure to delete?')" title="Menghapus data berdasarkan nama datanya (tidak menghapus semua data).">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+<!-- MODAL UPLOAD-->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Upload Datasets</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="/dataset/store" enctype="multipart/form-data">
+                <div class="modal-body">
+
+                    <label>Pilih Kategori</label>
+                    <select class="form-control" name="kategori" required="">
+                        {% for item in list_kategori %}
+                            <option value="{{ item['id'] }}">{{ item['kategori'] }}</option>
+                        {% endfor %}
+                    </select>
+
+					<label>Nama Data</label>
+					<input type="text" class="form-control" placeholder="" name="nama_data" required>
+
+					<label>Upload File</label>
+					<input type="file" class="form-control-file" name="file" accept=".csv, .xlsx" required>
+                    <small style="color: blue;">.csv, .xlsx</small>
+				</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
+{% endblock  %}
+
+{% block script %} {% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'layouts/app2.html' %}
+
+{% block content %}
+<div class="card card-default">
+    <div class="card-header">
+        <h3 class="card-title">Dataset {{ nama_data['nama_data'] }}</h3>
+        <div class="card-tools">
+            <a type="button" class="btn btn-primary btn-sm" href="/dataset">
+                <i class="fa fa-arrow-left"></i> Kembali
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped data-table" style="width:100%;">
+            <thead>
+                <tr>
+                    <th style="width: 10px;">No</th>
+                    <th>Date</th>
+                    <th>Open</th>
+                    <th>High</th>
+                    <th>Low</th>
+                    <th>Close</th>
+                    <th>Adj Close</th>
+                    <th>Volume</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ item['date'] }}</td>
+                        <td>{{ item['open'] }}</td>
+                        <td>{{ item['high'] }}</td>
+                        <td>{{ item['low'] }}</td>
+                        <td>{{ item['close'] }}</td>
+                        <td>{{ item['adj_close'] }}</td>
+                        <td>{{ item['volume'] }}</td>
+                    </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock  %}

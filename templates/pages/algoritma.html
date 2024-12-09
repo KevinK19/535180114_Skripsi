@@ -1,0 +1,257 @@
+{% if session.get('user') %}
+    {% extends 'layouts/app2.html' %}
+{% else %}
+{% extends 'layouts/app.html' %}
+{% endif %}
+
+{% block content %}
+<div class="card card-default">
+    <form method="GET" id="prediction-form">
+        <div class="card-body">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Pilih Jenis Perusahaan</label>
+                    <select class="form-control" name="namaData" required="">
+                        {% for item in list_data %}
+                            <option value="{{ item['nama_data'] }}" {% if item['nama_data'] == nama_data %} selected {% endif %} >{{ item['nama_data'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Pilih Ratio Pembagian Data </label>
+                    <select class="form-control" name="splitdata" required="required">
+                        {% for idx, item in df_split.iterrows() %}
+                            <option value="{{ item['test_split'] }}" {% if item['test_split'] == test_split %} selected {% endif %} >{{ item['keterangan'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary" id="predict-button" type="submit">Prediksi</button>
+        </div>
+    </form>
+</div>
+<!-- Elemen Loading Spinner -->
+<div id="loading-spinner" style="display:none; text-align:center; margin-top:20px;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <p>Memproses prediksi, mohon tunggu...</p>
+    <!-- Elemen Progress -->
+    <div id="progress" style="text-align:center; margin-top:20px;"></div>
+</div>
+
+
+    {% if show_data == 1 %}
+    <center><h5>Prediksi Harga Saham {{ nama_data }} Menggunakan LSTM DAN BiLSTM</h5></center>
+    <div class="card card-default">
+        <div class="card-header">
+            {% for idx, item in df_split.iterrows() %}
+            {% if item['test_split'] == test_split %}
+            <h3 class="card-title">Persentase pembagian data: {{ item['keterangan'] }}</h3>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="card-body">
+            <center><h5><b>Data Training</b></h5></center>
+            <p>Data training digunakan untuk melatih model.</p><hr>
+            <table class="table table-bordered data-table">
+                <thead>
+                    <th style="width: 1px;">No</th>
+                    <th>Date</th>
+                    <th>Close Price</th>
+                </thead>
+                <tbody>
+                    {% for index, train in df_train.iterrows() %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ train['Date'] }}</td>
+                            <td>{{ '%.3f' % train['Close'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card card-default">
+        <div class="card-body">
+            <center><h5><b>Hasil Prediksi Data Testing</b></h5></center>
+            <p>
+                - Data testing digunakan untuk menguji kemampuan model dalam memprediksi atau mengklasifikasikan data yang tidak digunakan selama pelatihan. <br>
+                - Kolom Close price merupakan harga asli saham dari yahoo finance. <br>
+                - Kolom LSTM adalah hasil prediksi menggunakan LSTM. <br>
+                - Kolom BiLSTM adalah hasil prediksi menggunakan BiLSTM.
+            </p><hr>
+            <table class="table table-bordered data-table">
+                <thead>
+                    <th style="width: 1px;">No</th>
+                    <th>Date</th>
+                    <th>Close Price</th>
+                    <th>LSTM</th>
+                    <th>BiLSTM</th>
+                </thead>
+                <tbody>
+                    {% for index, train in df_test.iterrows() %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ train['Date'] }}</td>
+                            <td>{{ '%.3f' % train['Close'] }}</td>
+                            <td>{{ '%.3f' % train['LSTM'] }}</td>
+                            <td>{{ '%.3f' % train['BiLSTM'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card card-default">
+        <div class="card-body">
+            <center><h5><b>Visualisasi Data Pengujian</b></h5></center>
+            <canvas id="myChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+    <div class="card card-default">
+        <div class="card-body">
+            <center><h5><b>Perbandingan Evaluasi</b></h5></center>
+            <p>
+                Nilai MAE dan MAPE yang kecil adalah yang terbaik, karena menunjukkan bahwa model membuat prediksi yang lebih akurat. 
+                Semakin mendekati nol nilai MAE dan MAPE, semakin kecil rata-rata kesalahan prediksi, yang berarti model lebih baik.
+            </p><hr>
+            <table class="table table-bordered data-table">
+                <thead>
+                    <th style="width: 1px;">No</th>
+                    <th>Algoritma</th>
+                    <th>MAPE(%)</th>
+                    <th>MAE</th>
+                </thead>
+                <tbody>
+                    {% for index, row in evaluasi.iterrows() %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ row['algoritma'] }}</td>
+                            <td>{{ '%.3f' % row['MAPE(%)'] }}</td>
+                            <td>{{ '%.3f' % row['MAE'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+{% endblock  %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    
+    // Mengambil data dari Flask (menggunakan Jinja2 untuk menampilkan data Python di dalam JavaScript)
+    var chartData = {
+        labels: {{ labels | tojson }},  // Data labels (tanggal)
+        datasets: [
+            {
+                label: 'Close Price',
+                data: {{ value1 | tojson }},  // Data harga saham sebenarnya
+                borderColor: '#1f77b4',
+                fill: false,
+                tension: 0.1
+            },
+            {
+                label: 'LSTM Prediction',
+                data: {{ value2 | tojson }},  // Data harga saham sebenarnya
+                borderColor: '#1fb45c',
+                fill: false,
+                tension: 0.1
+            },
+            {
+                label: 'BiLSTM Prediction',
+                data: {{ value3 | tojson }},  // Data harga saham sebenarnya
+                borderColor: '#dccd32',
+                fill: false,
+                tension: 0.1
+            }
+        ]
+    };
+    // Membuat chart
+    new Chart(ctx, {
+        type: 'line',  // Jenis grafik
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    },
+                    ticks: {
+                        autoSkip: true,  // Otomatis melewatkan label agar tidak terlalu banyak
+                        maxTicksLimit: 10  // Batasi jumlah label yang ditampilkan
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Close Price'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+</script>
+<script>
+    let trainingCompleted = false;  // Flag to track if training is completed
+
+    // Function to fetch progress from the server
+    function fetchProgress() {
+        fetch("/static/progress.txt")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById("progress").innerText = data;
+
+                // Check if training is complete (based on message in progress.txt)
+                if (data.includes("Training completed")) {
+                    trainingCompleted = true;
+                    clearInterval(progressInterval);  // Stop the polling
+                    document.getElementById("loading-spinner").style.display = "none"; // Hide spinner
+                    alert("Training completed! You can now proceed.");  // Notify user
+                }
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                document.getElementById("progress").innerText = "Error: Could not load progress.";
+            });
+    }
+
+    // Polling progress every second
+    const progressInterval = setInterval(fetchProgress, 1000);
+
+    // Event listener for the prediction form submission to show loading spinner
+    document.getElementById("prediction-form").addEventListener("submit", function(event) {
+        if (!trainingCompleted) {
+            // Tampilkan spinner loading jika pelatihan belum selesai
+            document.getElementById("loading-spinner").style.display = "block";
+        } else {
+            // Jika pelatihan selesai, tampilkan pesan dan biarkan form submit
+            alert("Training has already completed. Processing your submission.");
+        }
+    });
+</script>
+
+
+
+{% endblock %}
+
+

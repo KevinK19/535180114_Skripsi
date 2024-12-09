@@ -1,0 +1,27 @@
+{% extends 'layouts/app2.html' %}
+
+{% block content %}
+    <div class="card card-default">
+        <div class="card-header">
+            <h3 class="card-title">Tambah Kategori</h3>
+            <div class="card-tools">
+                <a type="button" class="btn btn-info btn-sm" href="/dataset">
+                    <i class="fa fa-arrow-left"></i> Kembali
+                </a>
+            </div>
+        </div>
+        <form method="POST" action="/kategori/store">
+	        <div class="card-body">
+	        	<div class="form-group row">
+	        		<label class="col-md-2 col-form-label">Kategori</label>
+	        		<div class="col-md-5">
+	        			<input type="text" class="form-control" placeholder="Masukkan Kategori" name="kategori" required="">
+	        		</div>
+	        	</div>
+	        </div>
+	        <div class="card-footer">
+	        	<button class="btn btn-primary">Simpan</button>
+	        </div>
+        </form>
+    </div>
+{% endblock  %}

@@ -1,0 +1,217 @@
+{% if session.get('user') %}
+    {% extends 'layouts/app2.html' %}
+{% else %}
+{% extends 'layouts/app.html' %}
+{% endif %}
+
+
+{% block content %}
+<div class="col-12" id="accordion">
+    <div class="card card-primary card-outline">
+        <a class="d-block w-100" data-toggle="collapse" href="#collapse1">
+            <div class="card-header">
+                <h4 class="card-title w-100">
+                    Algoritma apa yang digunakan untuk prediksi?
+                </h4>
+            </div>
+        </a>
+        <div id="collapse1" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+                Algoritma yang digunakan untuk prediksi adalah LSTM dan BiLSTM.
+            </div>
+        </div>
+    </div>
+    <div class="card card-primary card-outline">
+        <a class="d-block w-100" data-toggle="collapse" href="#collapse2">
+            <div class="card-header">
+                <h4 class="card-title w-100">
+                    Apa perbedaan LSTM dan BiLSTM?
+                </h4>
+            </div>
+        </a>
+        <div id="collapse2" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+                - <b>LSTM (Long Short-Term Memory)</b> adalah jenis recurrent neural network (RNN) yang dirancang untuk mengenali pola dalam 
+                data berurutan dan mempertahankan informasi penting dari urutan sebelumnya. LSTM memproses data hanya dalam satu arah, 
+                yaitu dari awal hingga akhir urutan, sehingga informasi di masa depan tidak digunakan dalam prediksi. <br>
+                - <b>BiLSTM (Bidirectional LSTM)</b> adalah variasi dari LSTM yang memproses data dalam dua arah: dari awal ke akhir (forward) 
+                dan dari akhir ke awal (backward). Dengan cara ini, BiLSTM dapat menangkap informasi dari konteks sebelumnya dan 
+                setelahnya dalam urutan, yang membuatnya lebih baik dalam memahami konteks yang memerlukan informasi dari kedua arah, 
+                tetapi juga memerlukan sumber daya lebih besar.
+            </div>
+        </div>
+    </div>
+    <div class="card card-primary card-outline">
+        <a class="d-block w-100" data-toggle="collapse" href="#collapse3">
+            <div class="card-header">
+                <h4 class="card-title w-100">
+                    Apa tujuan dibuat data training dan data testing?
+                </h4>
+            </div>
+        </a>
+        <div id="collapse3" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+                Tujuan pembuatan data training dan data testing dalam pengembangan model machine learning adalah untuk memastikan bahwa model 
+                dapat belajar dengan baik dari data dan kemudian menguji kemampuannya untuk generalisasi ke data yang belum pernah dilihat 
+                sebelumnya.
+            </div>
+        </div>
+    </div>
+    <div class="card card-primary card-outline">
+        <a class="d-block w-100" data-toggle="collapse" href="#collapse4">
+            <div class="card-header">
+                <h4 class="card-title w-100">
+                    Apa fungsi data training?
+                </h4>
+            </div>
+        </a>
+        <div id="collapse4" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+                - Digunakan untuk melatih model. <br>
+                - Model belajar pola, fitur, dan hubungan yang ada dalam data untuk membuat prediksi atau klasifikasi. <br>
+                - Tujuannya adalah untuk memungkinkan model mengoptimalkan parameter-parameter internalnya (seperti bobot dalam jaringan saraf) 
+                agar bisa membuat prediksi yang lebih akurat. 
+            </div>
+        </div>
+    </div>
+    <div class="card card-primary card-outline">
+        <a class="d-block w-100" data-toggle="collapse" href="#collapse5">
+            <div class="card-header">
+                <h4 class="card-title w-100">
+                    Apa fungsi data testing?
+                </h4>
+            </div>
+        </a>
+        <div id="collapse5" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+                - Digunakan untuk menguji kemampuan model dalam memprediksi atau mengklasifikasikan data yang tidak digunakan selama pelatihan. <br>
+                - Ini membantu mengevaluasi generalization error, yaitu seberapa baik model dapat menangani data baru yang tidak ada dalam 
+                data training. <br>
+                - Tujuannya adalah untuk memastikan bahwa model tidak hanya menghafal data training (overfitting) tetapi juga dapat bekerja 
+                dengan baik pada data yang berbeda (generalization).
+            </div>
+        </div>
+    </div>
+    <div class="card card-primary card-outline">
+        <a class="d-block w-100" data-toggle="collapse" href="#collapse6">
+            <div class="card-header">
+                <h4 class="card-title w-100">
+                    Nilai apa saja yang digunakan untuk mengukur performa model?
+                </h4>
+            </div>
+        </a>
+        <div id="collapse6" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+                MAPE (Mean Absolute Percentage Error) dan MAE (Mean Absolute Error).
+            </div>
+        </div>
+    </div>
+    <div class="card card-primary card-outline">
+        <a class="d-block w-100" data-toggle="collapse" href="#collapse7">
+            <div class="card-header">
+                <h4 class="card-title w-100">
+                    Apa itu MAPE?
+                </h4>
+            </div>
+        </a>
+        <div id="collapse7" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+                MAPE (Mean Absolute Percentage Error) mengukur seberapa besar kesalahan prediksi dalam persentase dari nilai sebenarnya. Ini memberikan gambaran seberapa 
+                besar kesalahan relatif terhadap nilai yang sebenarnya.
+            </div>
+        </div>
+    </div>
+    <div class="card card-primary card-outline">
+        <a class="d-block w-100" data-toggle="collapse" href="#collapse8">
+            <div class="card-header">
+                <h4 class="card-title w-100">
+                    Apa itu MAE?
+                </h4>
+            </div>
+        </a>
+        <div id="collapse8" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+                MAE (Mean Absolute Error) mengukur rata-rata dari selisih absolut antara nilai yang diprediksi dan nilai yang sebenarnya.
+            </div>
+        </div>
+    </div>
+    <div class="card card-primary card-outline">
+        <a class="d-block w-100" data-toggle="collapse" href="#collapse9">
+            <div class="card-header">
+                <h4 class="card-title w-100">
+                    Hasil MAPE dan MAE yang baik nilainya yang semakin besar atau semakin kecil?
+                </h4>
+            </div>
+        </a>
+        <div id="collapse9" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+                Nilai MAE dan MAPE yang kecil adalah yang terbaik, karena menunjukkan bahwa model membuat prediksi yang lebih akurat. 
+                Semakin mendekati nol nilai MAE dan MAPE, semakin kecil rata-rata kesalahan prediksi, yang berarti model lebih baik.
+            </div>
+        </div>
+    </div>
+    <div class="card card-primary card-outline">
+        <a class="d-block w-100" data-toggle="collapse" href="#collapse10">
+            <div class="card-header">
+                <h4 class="card-title w-100">
+                    Kenapa menggunakan MAPE dan MAE?
+                </h4>
+            </div>
+        </a>
+        <div id="collapse10" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+                - Mudah Dipahami: MAPE dalam persen dan MAE dalam satuan harga membantu pengguna memahami kesalahan prediksi secara sederhana. <br>
+                - Mengatasi Fluktuasi: MAPE memberikan kesalahan relatif dalam persen, cocok untuk data saham yang sangat 
+                fluktuatif (perubahan nilai yang naik turun secara tidak menentu atau tidak stabil dalam suatu periode waktu tertentu). <br>
+                - Tidak Sensitif Terhadap Outliers: MAE tidak terlalu terpengaruh oleh outliers dibanding MSE. <br>
+                - Konsisten untuk Berbagai Skala: MAPE memungkinkan perbandingan akurasi prediksi antara saham dengan harga yang berbeda. <br>
+                - Relevan untuk Tujuan Bisnis: Memberikan pandangan akurasi yang praktis untuk membantu pengambilan keputusan finansial.
+            </div>
+        </div>
+    </div>
+    <div class="card card-primary card-outline">
+        <a class="d-block w-100" data-toggle="collapse" href="#collapse11">
+            <div class="card-header">
+                <h4 class="card-title w-100">
+                    Apa itu LSTM?
+                </h4>
+            </div>
+        </a>
+        <div id="collapse11" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+                LSTM (Long Short-Term Memory) adalah jenis jaringan saraf tiruan (neural network) yang dirancang khusus untuk memproses data 
+                berurutan, seperti data teks, suara, atau data time-series seperti harga saham. LSTM merupakan jenis RNN (Recurrent Neural Network) 
+                yang memiliki mekanisme unik untuk menyimpan informasi dalam periode yang lebih panjang, sehingga dapat mengenali pola pada data 
+                yang bersifat sekuensial. <br>
+                <b>Komponen Utama LSTM</b><br>
+                LSTM memiliki struktur khusus yang membantu mengatasi masalah vanishing gradient pada RNN tradisional, sehingga LSTM lebih 
+                mampu mempertahankan informasi dalam jangka panjang. Komponen utamanya adalah tiga gate yang mengatur aliran informasi: <br>
+                - Forget Gate: Mengontrol informasi mana yang harus dilupakan dari memori. <br>
+                - Input Gate: Memutuskan informasi baru yang perlu ditambahkan ke memori. <br>
+                - Output Gate: Mengatur informasi mana yang harus dihasilkan sebagai output.
+            </div>
+        </div>
+    </div>
+    <div class="card card-primary card-outline">
+        <a class="d-block w-100" data-toggle="collapse" href="#collapse12">
+            <div class="card-header">
+                <h4 class="card-title w-100">
+                    Apa itu BiLSTM?
+                </h4>
+            </div>
+        </a>
+        <div id="collapse12" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+                BiLSTM (Bidirectional Long Short-Term Memory) adalah versi dari LSTM yang memproses data sekuensial dalam dua arah, 
+                yaitu maju (forward) dan mundur (backward). Dalam BiLSTM, informasi mengalir dari awal ke akhir, sekaligus dari akhir ke awal, 
+                sehingga model bisa menangkap konteks dari kedua arah. <br>
+                <b>Cara Kerja BiLSTM</b><br>
+                - Dua Lapisan LSTM: BiLSTM memiliki dua lapisan LSTM terpisah. Satu lapisan memproses data dari urutan pertama hingga 
+                terakhir (forward), sementara lapisan lain memproses data dari urutan terakhir ke pertama (backward). <br>
+                - Kombinasi Output: Setelah informasi diproses oleh kedua arah ini, hasil dari dua lapisan tersebut digabungkan 
+                (biasanya dengan cara penggabungan atau penjumlahan) untuk memberikan output akhir.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="/" class="brand-link">
+        <img src="{{ url_for('static', filename='adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"><br>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <a href="/" class="nav-link {% if 'home' in segment %} active {% endif %}">
+                        <i class="nav-icon fa fa-home"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/users" class="nav-link {% if 'user' in segment %} active {% endif %}">
+                        <i class="nav-icon fa fa-user"></i>
+                        <p>Admin</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/dataset" class="nav-link {% if 'dataset' in segment %} active {% endif %}">
+                        <i class="nav-icon fa fa-area-chart"></i>
+                        <p>Dataset</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/prediksi" class="nav-link {% if 'algoritma' in segment %} active {% endif %}">
+                        <i class="nav-icon fa fa-line-chart"></i>
+                        <p>Hasil Prediksi</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/evaluasi" class="nav-link {% if 'evaluasi' in segment %} active {% endif %}">
+                        <i class="nav-icon fa fa-calculator"></i>
+                        <p>MAPE & MAE</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/help" class="nav-link {% if 'help' in segment %} active {% endif %}">
+                        <i class="nav-icon fa fa-question-circle"></i>
+                        <p>Help</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>

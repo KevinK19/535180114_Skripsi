@@ -1,0 +1,204 @@
+{% if session.get('user') %}
+{% extends 'layouts/app2.html' %}
+{% else %}
+{% extends 'layouts/app.html' %}
+{% endif %}
+
+{% block content %}
+<div class="card card-default">
+    <form method="GET">
+        <div class="card-body">
+            <center>
+                <h5><b>Menampilkan Hasil MAPE & MAE</b></h5>
+            </center>
+            <p>
+                Untuk mendapatkan hasil MAPE dan MAE di halaman ini maka perlu menjalankan menu Hasil Prediksi terlebih
+                dahulu.
+            </p>
+            <!-- Select Input -->
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Pilih Kategori</label>
+                    <select class="form-control" name="kategori" required="">
+                        {% for item in list_kategori %}
+                            <option value="{{ item['id'] }}" {% if item['kategori'] == kategori['kategori'] %} selected {% endif %}>
+                                {{ item['kategori'] }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+{% if show_data == 1 %}
+<div class="card card-default">
+    <div class="card-body">
+        <center>
+            <h5><b>Hasil MAPE & MAE {{ kategori['kategori'] }}</b></h5>
+        </center>
+        <hr>
+        <table class="table table-bordered data-table">
+            <thead>
+                <th style="width: 1px;">No</th>
+                <th>Nama Data</th>
+                <th>Ratio Split Data</th>
+                <th>MAPE LSTM(%)</th>
+                <th>MAE LSTM</th>
+                <th>MAPE BiLSTM(%)</th>
+                <th>MAE BiLSTM</th>
+                <th>Aksi</th>
+            </thead>
+            <tbody>
+                {% for index, row in df.iterrows() %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ row['nama_data'] }}</td>
+                    {% if row['test_split'] == 0.4 %}
+                    <td>60% training dan 40% testing</td>
+                    {% elif row['test_split'] == 0.3 %}
+                    <td>70% training dan 30% testing</td>
+                    {% elif row['test_split'] == 0.2 %}
+                    <td>80% training dan 20% testing</td>
+                    {% elif row['test_split'] == 0.1 %}
+                    <td>90% training dan 10% testing</td>
+                    {% endif %}
+                    <td>{{ '%.3f' % row['mape_lstm'] }}</td>
+                    <td>{{ '%.3f' % row['mae_lstm'] }}</td>
+                    <td>{{ '%.3f' % row['mape_bilstm'] }}</td>
+                    <td>{{ '%.3f' % row['mae_bilstm'] }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="#" data-toggle="modal"
+                            title="Menampilkan visualisasi hasil MAPE & MAE berdasarkan nama data yang dipilih."
+                            data-target="#showDataset_{{ row['id'] }}">
+                            <i class="fa fa-eye"></i> Detail
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% for index, item in df.iterrows() %}
+<!-- Modal Detail-->
+<div class="modal fade" id="showDataset_{{ item['id'] }}" tabindex="-1" role="dialog"
+    aria-labelledby="showDatasetLabel_{{ item['id'] }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail Data - {{ item['nama_data'] }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6"><canvas id="mapeChart_{{ item['id'] }}" width="400" height="400"></canvas></div>
+                    <div class="col-md-6"><canvas id="maeChart_{{ item['id'] }}" width="400" height="400"></canvas></div>
+                </div>
+                
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-empty" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% for index, item in df.iterrows() %}
+<script>
+    // Fungsi untuk membuat chart hanya saat modal ditampilkan
+    $('#showDataset_{{ item["id"] }}').on('shown.bs.modal', function () {
+        // Data untuk chart MAPE
+        const mapeData = {
+            labels: ['Algoritma'],
+            datasets: [{
+                label: 'LSTM',
+                data: [{{ item['mape_lstm'] }}],
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                barThickness: 60 // Atur lebar batang
+            },
+            {
+                label: 'BiLSTM',
+                data: [{{ item['mape_bilstm'] }}],
+                backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1,
+                barThickness: 60 // Atur lebar batang
+            }]
+        };
+
+        // Data untuk chart MAE
+        const maeData = {
+            labels: ['Algoritma'],
+            datasets: [{
+                label: 'LSTM',
+                data: [{{ '%.3f' % (item['mae_lstm']) }}],  
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                barThickness: 60 // Atur lebar batang
+            },
+            {
+                label: 'BiLSTM',
+                data: [{{ '%.3f' % (item['mae_bilstm']) }}],  
+                backgroundColor: 'rgba(255, 159, 64, 0.6)',
+                borderColor: 'rgba(255, 159, 64, 1)',
+                borderWidth: 1,
+                barThickness: 60 // Atur lebar batang
+            }]
+        };
+
+        // Options untuk chart dengan judul dinamis
+        const optionsWithTitle = (title) => ({
+            plugins: {
+                title: {
+                    display: true,
+                    text: title,
+                    font: { size: 18 }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.dataset.label + ': ' + tooltipItem.raw.toFixed(3);
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        });
+
+        // Inisialisasi chart untuk MAPE
+        const mapeCtx = document.getElementById('mapeChart_{{ item["id"] }}').getContext('2d');
+        new Chart(mapeCtx, {
+            type: 'bar',
+            data: mapeData,
+            options: optionsWithTitle('Perbandingan MAPE(%)')
+        });
+
+        // Inisialisasi chart untuk MAE
+        const maeCtx = document.getElementById('maeChart_{{ item["id"] }}').getContext('2d');
+        new Chart(maeCtx, {
+            type: 'bar',
+            data: maeData,
+            options: optionsWithTitle('Perbandingan MAE')
+        });
+    });
+</script>
+{% endfor %}
+{% endblock %}

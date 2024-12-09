@@ -1,0 +1,9 @@
+Cara menjalankan program:
+- Buka project menggunakan visual studio code (buka 1 folder)
+- Menjalankan perintah menggunakan terminal visual studio code
+- Perintah untuk install library: pip install -r requirements.txt
+- Perintah untuk menjalankan flask: python server.py
+
+Akses login:
+Username: admin
+Password: 123123

@@ -1,0 +1,327 @@
+{% if session.get('user') %}
+    {% extends 'layouts/app2.html' %}
+{% else %}
+{% extends 'layouts/app.html' %}
+{% endif %}
+
+{% block content %}
+<div class="card card-default">
+    <div class="card-body">
+        <center><h3><b>Selamat Datang di Aplikasi {{ APP_NAME }}</b></h3></center>
+        <!-- <img style="width: 100%; height: 25rem; display: block; margin: auto;" src="static/adminlte/dist/img/dashboard.jpg"> -->
+        
+        <div class="row">
+            <div class="col-md-6"><canvas id="myChart1" width="400" height="200"></canvas></div>
+            <div class="col-md-6"><canvas id="myChart5" width="400" height="200"></canvas></div>
+            <div class="col-md-6"><canvas id="myChart2" width="400" height="200"></canvas></div>
+            <div class="col-md-6"><canvas id="myChart4" width="400" height="200"></canvas></div>
+            <div class="col-md-6"><canvas id="myChart3" width="400" height="200"></canvas></div>
+            <div class="col-md-6"><canvas id="myChart6" width="400" height="200"></canvas></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('myChart1').getContext('2d');
+    
+    // Mengambil data dari Flask (menggunakan Jinja2 untuk menampilkan data Python di dalam JavaScript)
+    var chartData = {
+        labels: {{ labels | tojson }},  // Data labels (tanggal)
+        datasets: [
+            {
+                label: 'PT Bank Rakyat Indonesia',
+                data: {{ value | tojson }},  // Data harga saham sebenarnya
+                borderColor: 'blue',
+                fill: false,
+                tension: 0.1
+            }
+        ]
+    };
+
+    // Membuat chart
+    new Chart(ctx, {
+        type: 'line',  // Jenis grafik
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    },
+                    ticks: {
+                        autoSkip: true,  // Otomatis melewatkan label agar tidak terlalu banyak
+                        maxTicksLimit: 5  // Batasi jumlah label yang ditampilkan
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Close Price'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+</script>
+<script>
+    var ctx = document.getElementById('myChart2').getContext('2d');
+    
+    // Mengambil data dari Flask (menggunakan Jinja2 untuk menampilkan data Python di dalam JavaScript)
+    var chartData = {
+        labels: {{ labels2 | tojson }},  // Data labels (tanggal)
+        datasets: [
+            {
+                label: 'PT Bank Mandiri',
+                data: {{ value2 | tojson }},  // Data harga saham sebenarnya
+                borderColor: '#1f77b4',
+                fill: false,
+                tension: 0.1
+            }
+        ]
+    };
+
+    // Membuat chart
+    new Chart(ctx, {
+        type: 'line',  // Jenis grafik
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    },
+                    ticks: {
+                        autoSkip: true,  // Otomatis melewatkan label agar tidak terlalu banyak
+                        maxTicksLimit: 5  // Batasi jumlah label yang ditampilkan
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Close Price'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+</script>
+<script>
+    var ctx = document.getElementById('myChart3').getContext('2d');
+    
+    // Mengambil data dari Flask (menggunakan Jinja2 untuk menampilkan data Python di dalam JavaScript)
+    var chartData = {
+        labels: {{ labels3 | tojson }},  // Data labels (tanggal)
+        datasets: [
+            {
+                label: 'PT Bank Central Asia',
+                data: {{ value3 | tojson }},  // Data harga saham sebenarnya
+                borderColor: '#2ca02c',
+                fill: false,
+                tension: 0.1
+            }
+        ]
+    };
+
+    // Membuat chart
+    new Chart(ctx, {
+        type: 'line',  // Jenis grafik
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    },
+                    ticks: {
+                        autoSkip: true,  // Otomatis melewatkan label agar tidak terlalu banyak
+                        maxTicksLimit: 5  // Batasi jumlah label yang ditampilkan
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Close Price'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+</script>
+<script>
+    var ctx = document.getElementById('myChart4').getContext('2d');
+    
+    // Mengambil data dari Flask (menggunakan Jinja2 untuk menampilkan data Python di dalam JavaScript)
+    var chartData = {
+        labels: {{ labels4 | tojson }},  // Data labels (tanggal)
+        datasets: [
+            {
+                label: 'PT Aneka Tambang',
+                data: {{ value4 | tojson }},  // Data harga saham sebenarnya
+                borderColor: '#ff7f0e',
+                fill: false,
+                tension: 0.1
+            }
+        ]
+    };
+
+    // Membuat chart
+    new Chart(ctx, {
+        type: 'line',  // Jenis grafik
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    },
+                    ticks: {
+                        autoSkip: true,  // Otomatis melewatkan label agar tidak terlalu banyak
+                        maxTicksLimit: 5  // Batasi jumlah label yang ditampilkan
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Close Price'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+</script>
+<script>
+    var ctx = document.getElementById('myChart5').getContext('2d');
+    
+    // Mengambil data dari Flask (menggunakan Jinja2 untuk menampilkan data Python di dalam JavaScript)
+    var chartData = {
+        labels: {{ labels5 | tojson }},  // Data labels (tanggal)
+        datasets: [
+            {
+                label: 'PT Adaro Energy Indonesia',
+                data: {{ value5 | tojson }},  // Data harga saham sebenarnya
+                borderColor: '#9467bd',
+                fill: false,
+                tension: 0.1
+            }
+        ]
+    };
+
+    // Membuat chart
+    new Chart(ctx, {
+        type: 'line',  // Jenis grafik
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    },
+                    ticks: {
+                        autoSkip: true,  // Otomatis melewatkan label agar tidak terlalu banyak
+                        maxTicksLimit: 5  // Batasi jumlah label yang ditampilkan
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Close Price'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+</script>
+<script>
+    var ctx = document.getElementById('myChart6').getContext('2d');
+    
+    // Mengambil data dari Flask (menggunakan Jinja2 untuk menampilkan data Python di dalam JavaScript)
+    var chartData = {
+        labels: {{ labels6 | tojson }},  // Data labels (tanggal)
+        datasets: [
+            {
+                label: 'PT TIMAH',
+                data: {{ value6 | tojson }},  // Data harga saham sebenarnya
+                borderColor: '#8c564b',
+                fill: false,
+                tension: 0.1
+            }
+        ]
+    };
+
+    // Membuat chart
+    new Chart(ctx, {
+        type: 'line',  // Jenis grafik
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    },
+                    ticks: {
+                        autoSkip: true,  // Otomatis melewatkan label agar tidak terlalu banyak
+                        maxTicksLimit: 5  // Batasi jumlah label yang ditampilkan
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Close Price'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
